@@ -19,16 +19,39 @@ function ExplorePage() {
   
     const fetchBooks = async (query) => {
       try {
-        const response = await fetch(`https://openlibrary.org/search.json?q=${query}&limit=10`);
+        const response = await fetch(`https://openlibrary.org/search.json?q=${query}&limit=20`);
         if (!response.ok) {
           throw new Error('Network response was not ok.');
         }
         const data = await response.json();
+        console.log(data)
         setBooks(data.docs);
       } catch (error) {
         console.error('Error fetching books:', error);
       }
     };
+
+    useEffect(() => {
+      const fetchInitBooks = async () => {
+        try {
+          const response = await fetch(
+            'https://openlibrary.org/search.json?q=*&sort=want_to_read&limit=20'
+          );
+  
+          if (!response.ok) {
+            throw new Error('Failed to fetch data');
+          }
+  
+          const data = await response.json();
+          console.log(data)
+          setBooks(data.docs);
+        } catch (error) {
+          console.error(error);
+        }
+      };
+  
+      fetchInitBooks();
+    }, []);
   
     return (
       <div className="ExplorePage">
