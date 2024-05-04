@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
+import logo from './book-club-logo-notext.png'
+import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 
 function UsersPage() {
     const [searchTerm, setSearchTerm] = useState('');
@@ -49,20 +51,40 @@ function UsersPage() {
   
     return (
       <div className="UsersPage">
-        <h1>Search Users</h1>
-        <input
-          type="text"
-          placeholder="Enter email address"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
+        <div className="searchDiv">
+          <input
+            type="text"
+            placeholder="Search"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="searchField"
+            style={{'width': '700px'}}
+          />
+        </div>
         {loading ? <p>Searching...</p> : (
           <ul>
             {searchResults.length > 0 ? (
               searchResults.map((user, index) => (
-                <li key={index}>
-                    <Link to={`/user/${user.userId}`}>{user.email}</Link>
-                </li>
+                  <div key={index} className="userTile">
+                      <p className="userName">{user.name}</p>
+                      <p className='email'>{user.email}</p>
+                      <button className="userButton">
+                        <Link to={`/user/${user.userId}`}>
+                          <div style={{display:'flex'}}>
+                            <AccountBalanceIcon style={{ marginLeft: "10px", marginRight: "10px", marginTop: "10px", color:'white'}} />
+                            <p className="userBtnText">View Library</p>
+                          </div>
+                        </Link>
+                      </button>
+                      <button className="userButton">
+                        <Link to={`/user/${user.userId}`}>
+                          <div className="button2">
+                            <img className="btnLogo" src={logo} ></img>
+                            <p className="userBtnText2">Add to Book Club</p>
+                          </div>
+                        </Link>
+                      </button>
+                  </div>
               ))
             ) : (
               <p>No users found.</p>

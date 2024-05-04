@@ -3,7 +3,6 @@
 # TODOS:
 
 - style BookReview
-- style ReviewsPage
 - style UsersPage + add logic
     - add people to your book clubs button
 - create ClubsPage

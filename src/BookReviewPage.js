@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
+import { v4 as uuidv4 } from 'uuid';
 
 function BookReviewPage() {
     const { bookId } = useParams();
@@ -48,11 +49,13 @@ function BookReviewPage() {
       }
   
       const newReview = {
+        id: uuidv4(),
         bookTitle: book.title,
-        bookCover: book.imageLinks.thumbnail,
+        bookCover: `https://books.google.com/books/publisher/content/images/frontcover/${getIDFromURL(book.infoLink)}?fife=w400-h600&source=gbs_api`,
         rating: rating,
         comment: comment,
-        userId: user.uid
+        userId: user.uid,
+        numPages: book.pageCount
       };
   
       try {
