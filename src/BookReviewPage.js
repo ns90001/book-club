@@ -3,6 +3,30 @@ import { useParams, useNavigate } from 'react-router-dom';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 import { v4 as uuidv4 } from 'uuid';
+import { Rating } from '@mui/material';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import SendIcon from '@mui/icons-material/Send';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { Link } from 'react-router-dom';
+import { IconButton } from '@mui/material';
+
+const theme = createTheme({
+  components: {
+    MuiRating: {
+      styleOverrides: {
+        iconFilled: {
+          color: 'black',
+          fontSize: '3rem',
+        },
+        iconEmpty: {
+          color: 'black',
+          fontSize: '3rem',
+        },
+      },
+    },
+  },
+});
+
 
 function BookReviewPage() {
     const { bookId } = useParams();
@@ -11,7 +35,16 @@ function BookReviewPage() {
     const [rating, setRating] = useState(0);
     const [comment, setComment] = useState('');
     const navigate = useNavigate();
-  
+    const [currentDateTime, setCurrentDateTime] = useState(new Date());
+
+    useEffect(() => {
+      const interval = setInterval(() => {
+        setCurrentDateTime(new Date());
+      }, 60000);
+
+      return () => clearInterval(interval);
+    }, []);
+    
     useEffect(() => {
       fetchBook(bookId);
     }, [bookId]);
@@ -34,7 +67,7 @@ function BookReviewPage() {
     };
   
     const handleRatingChange = (e) => {
-      setRating(parseInt(e.target.value));
+      setRating(parseFloat(e.target.value));
     };
   
     const handleCommentChange = (e) => {
@@ -98,29 +131,51 @@ function BookReviewPage() {
 
     return (
       <div className="BookReviewPage">
-        <h1>Book Review</h1>
-        <div>
-          <img src={cover} alt={book.title} style={{ width: '128px', height: '192px' }}/>
-          <h2>{book.title}</h2>
-          <p>Author: {author}</p>
+        <Link to="/explore" style={{ textDecoration: 'none' }} className="back-link">
+          <IconButton>
+            <ArrowBackIcon style={{color:'black', margin:'10px'}}/>
+            <p style={{fontSize:'0.75em'}}>Back</p>
+          </IconButton>
+        </Link>
+        <div className="reviewDiv">
+            <div className="reviewTitle" style={{display:'flex', marginBottom:'25px'}}> 
+              <div style={{display:"flex", alignItems:'center'}}>
+                <p style={{marginRight:'30px', marginLeft:'-40px', fontSize:'1.5em'}}><b>Review:</b> <i>{book.title}</i></p>
+                <p style={{fontSize:'1.2em'}}>Author: {author}</p>
+              </div>
+            </div>
+          <div style={{display:'flex'}}>
+          <img src={cover} alt={book.title} className="bookReviewPicture"/>
+          <div style={{display: 'inline'}}>
+            <p className="dateString">{currentDateTime.toLocaleDateString()} {currentDateTime.toLocaleTimeString(undefined, { hour: 'numeric', minute: 'numeric', hour12: true })}</p>
+            <div className="stars">
+              <ThemeProvider theme={theme}>
+                <Rating
+                  name="customized-half-rating"
+                  value={rating}
+                  precision={0.5}
+                  onChange={handleRatingChange}
+                  size="extr"
+                  max={5}
+                />
+              </ThemeProvider>
+            </div>
+          <div className="comments-submit">
+            <textarea
+              placeholder="Write your comments..."
+              value={comment}
+              onChange={handleCommentChange}
+            ></textarea>
+            <button style={{marginBottom:'25px'}} className="userButton" onClick={handleSubmit}>
+            <div style={{display:'flex'}}>
+              <SendIcon style={{ marginLeft: "10px", marginRight: "10px", marginTop: "10px", color:'white'}} />
+              <p className="userBtnText">Submit Review</p>
+            </div>
+          </button>
+          </div>
+          </div>
+          </div>
         </div>
-        <div>
-          <h2>Rate this book</h2>
-          <select value={rating} onChange={handleRatingChange}>
-            {[0, 1, 2, 3, 4, 5].map((value) => (
-              <option key={value} value={value}>{value} Star(s)</option>
-            ))}
-          </select>
-        </div>
-        <div>
-          <h2>Comments</h2>
-          <textarea
-            placeholder="Write your comments..."
-            value={comment}
-            onChange={handleCommentChange}
-          ></textarea>
-        </div>
-        <button onClick={handleSubmit}>Submit Review</button>
       </div>
     );
   }

@@ -48,6 +48,9 @@ function Navbar() {
           <li className={`navItem ${isActiveTab('/users')}`}>
             <Link to="/users">Friends</Link>
           </li>
+          <li className={`navItem ${isActiveTab('/clubs')}`}>
+            <Link to="/clubs">Book Clubs</Link>
+          </li>
         </ul>}
       </div>
       <div className="navLeft">

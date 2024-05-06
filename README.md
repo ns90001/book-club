@@ -2,9 +2,6 @@
 
 # TODOS:
 
-- style BookReview
-- style UsersPage + add logic
-    - add people to your book clubs button
 - create ClubsPage
 - add club logic
 
@@ -44,6 +41,7 @@ clubs <-> users is a many-to-many link
 - start a book club, invite people via email to join the app and be part of your book club
 --> idea: you can only get on the site by being invited to a book club??
     - they will receive a link to the site and an access code needed at login?
+- Private/Public reviews
 
 
 

@@ -34,6 +34,7 @@ function ExplorePage() {
   
     const fetchBooks = async (query) => {
       try {
+        console.log(`https://www.googleapis.com/books/v1/volumes?q=${query}&maxResults=20&orderBy=relevance`)
         const response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${query}&maxResults=20&orderBy=relevance`);
         if (!response.ok) {
           throw new Error('Network response was not ok.');
@@ -50,8 +51,11 @@ function ExplorePage() {
 
     const transformGoogleBook = (book) => {
       let cover = `https://books.google.com/books/publisher/content/images/frontcover/${book.id}?fife=w400-h600&source=gbs_api`;
-      let isbnIdentifiers = book.volumeInfo.industryIdentifiers.filter(identifier => identifier.type === 'ISBN_10');
-      const isbn = isbnIdentifiers.length > 0 ? isbnIdentifiers[0].identifier : 'ISBN not available';
+      let isbn = book.id;
+      if (book.volumeInfo.industryIdentifiers != undefined) {
+        let isbnIdentifiers = book.volumeInfo.industryIdentifiers.filter(identifier => identifier.type === 'ISBN_10');
+        isbn = isbnIdentifiers.length > 0 ? isbnIdentifiers[0].identifier : 'ISBN not available';
+      }
       return {
         id: isbn,
         title: book.volumeInfo.title,
