@@ -13,6 +13,9 @@ import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 import { getFirestore } from "firebase/firestore";
 import UsersPage from './UsersPage';
+import ClubForm from './BookClubForm.js';
+import BookClubsPage from './BookClubsPage';
+import BookClubPage from './BookClubPage';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAgfRASy7swwXQmDm2PiPIInUHi0TCdK-E",
@@ -57,6 +60,9 @@ function App() {
           <Route path="/explore" element={<ExplorePage />} />
           <Route path="/users" element={<UsersPage />} />
           <Route path="/user/:userId" element={<ReviewsPage />} />
+          <Route path="/newclub" element={<ClubForm />} />
+          <Route path="/clubs" element={<BookClubsPage />} />
+          <Route path="/bookclub/:clubId" element={<BookClubPage />} />
         </Routes>
       </div>
     </Router>
